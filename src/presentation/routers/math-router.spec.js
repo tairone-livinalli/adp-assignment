@@ -1,4 +1,4 @@
-// {
+// { sample
 //   "id": "66df7d3d-8340-4efd-a528-b5204d02a864",
 //   "operation": "multiplication",
 //   "left": -3364257091338055,
@@ -7,7 +7,7 @@
 
 class MathRouter {
   route (httpRequest) {
-    if (!httpRequest.body.id) {
+    if (!httpRequest.body.id || !httpRequest.body.operation) {
       return {
         statusCode: 400
       }
@@ -21,6 +21,19 @@ describe('Math Router', () => {
     const httpRequest = {
       body: {
         operation: 'multiplication',
+        left: -3364257091338055,
+        right: -6634491299249283
+      }
+    }
+    const httpResponse = sut.route(httpRequest)
+    expect(httpResponse.statusCode).toBe(400)
+  })
+
+  test('should return 400 if no operation is provided', () => {
+    const sut = new MathRouter()
+    const httpRequest = {
+      body: {
+        id: '66df7d3d-8340-4efd-a528-b5204d02a864',
         left: -3364257091338055,
         right: -6634491299249283
       }
