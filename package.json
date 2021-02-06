@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/tairone-livinalli/adp-assignment/issues"
   },
-  "homepage": "https://github.com/tairone-livinalli/adp-assignment#readme"
+  "homepage": "https://github.com/tairone-livinalli/adp-assignment#readme",
+  "devDependencies": {
+    "standard": "^16.0.3"
+  }
 }
