@@ -7,7 +7,8 @@
 
 class MathRouter {
   route (httpRequest) {
-    if (!httpRequest.body.id || !httpRequest.body.operation) {
+    const { id, operation } = httpRequest.body
+    if (!id || !operation) {
       return {
         statusCode: 400
       }
