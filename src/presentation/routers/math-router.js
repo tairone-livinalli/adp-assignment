@@ -27,8 +27,6 @@ module.exports = class MathRouter {
 
     this.mathUseCase.calculate(id, operation, left, right)
 
-    return {
-      statusCode: 400
-    }
+    return HttpResponse.badRequestInvalid('operation')
   }
 }

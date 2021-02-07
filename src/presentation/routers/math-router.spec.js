@@ -1,5 +1,6 @@
 const MathRouter = require('./math-router')
 const MissingParamError = require('../helpers/missing-param-error')
+const InvalidParamError = require('../helpers/invalid-param-error')
 
 const makeSut = () => {
   class MathUseCaseSpy {
@@ -122,5 +123,6 @@ describe('Math Router', () => {
     const httpResponse = sut.route(httpRequest)
 
     expect(httpResponse.statusCode).toEqual(400)
+    expect(httpResponse.body).toEqual(new InvalidParamError('operation'))
   })
 })
