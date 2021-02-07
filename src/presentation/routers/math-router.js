@@ -6,7 +6,7 @@ module.exports = class MathRouter {
   }
 
   route (httpRequest) {
-    if (!httpRequest || !httpRequest.body || !this.mathUseCase || !this.mathUseCase.calculate) {
+    if (!httpRequest || !httpRequest.body || !this.mathUseCase || !this.mathUseCase.calculate || !this.mathUseCase.isOperationValid) {
       return HttpResponse.serverError()
     }
 
@@ -25,8 +25,12 @@ module.exports = class MathRouter {
       return HttpResponse.badRequest('right')
     }
 
+    if (!this.mathUseCase.isOperationValid(operation)) {
+      return HttpResponse.badRequestInvalid('operation')
+    }
+
     this.mathUseCase.calculate(id, operation, left, right)
 
-    return HttpResponse.badRequestInvalid('operation')
+    return HttpResponse.ok()
   }
 }

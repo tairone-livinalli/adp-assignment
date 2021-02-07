@@ -10,6 +10,10 @@ const makeSut = () => {
       this.left = left
       this.right = right
     }
+
+    isOperationValid () {
+      return true
+    }
   }
 
   const mathUseCaseSpy = new MathUseCaseSpy()
@@ -110,7 +114,9 @@ describe('Math Router', () => {
   })
 
   test('Should return 400 when an invalid operation is provided', () => {
-    const { sut } = makeSut()
+    const { sut, mathUseCaseSpy } = makeSut()
+    mathUseCaseSpy.isOperationValid = () => { return false }
+
     const httpRequest = {
       body: {
         id: 'valid_id',
@@ -124,6 +130,22 @@ describe('Math Router', () => {
 
     expect(httpResponse.statusCode).toEqual(400)
     expect(httpResponse.body).toEqual(new InvalidParamError('operation'))
+  })
+
+  test('Should return 200 when valid httpRequest is provided', () => {
+    const { sut } = makeSut()
+    const httpRequest = {
+      body: {
+        id: 'valid_id',
+        operation: 'multiplication',
+        left: 2,
+        right: 3
+      }
+    }
+
+    const httpResponse = sut.route(httpRequest)
+
+    expect(httpResponse.statusCode).toEqual(200)
   })
 
   test('Should return 500 if no MathUseCase is provided', () => {
@@ -144,6 +166,23 @@ describe('Math Router', () => {
 
   test('Should return 500 if MathUseCase has no calculate method', () => {
     const sut = new MathRouter({})
+    const httpRequest = {
+      body: {
+        id: 'any_id',
+        operation: 'any_operation',
+        left: 2,
+        right: 3
+      }
+    }
+
+    const httpResponse = sut.route(httpRequest)
+
+    expect(httpResponse.statusCode).toEqual(500)
+  })
+
+  test('Should return 500 if MathUseCase has no isOperationValid method', () => {
+    const calculate = () => {}
+    const sut = new MathRouter({ calculate })
     const httpRequest = {
       body: {
         id: 'any_id',
