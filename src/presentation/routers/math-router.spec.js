@@ -1,54 +1,5 @@
-// { sample
-//   "id": "66df7d3d-8340-4efd-a528-b5204d02a864",
-//   "operation": "multiplication",
-//   "left": -3364257091338055,
-//   "right": -6634491299249283
-// }
-
-class MathRouter {
-  route (httpRequest) {
-    if (!httpRequest || !httpRequest.body) {
-      return HttpResponse.serverError()
-    }
-
-    const { id, operation, left, right } = httpRequest.body
-
-    if (!id) {
-      return HttpResponse.badRequest('id')
-    }
-    if (!operation) {
-      return HttpResponse.badRequest('operation')
-    }
-    if (!left) {
-      return HttpResponse.badRequest('left')
-    }
-    if (!right) {
-      return HttpResponse.badRequest('right')
-    }
-  }
-}
-
-class HttpResponse {
-  static badRequest (paramName) {
-    return {
-      statusCode: 400,
-      body: new MissingParamError(paramName)
-    }
-  }
-
-  static serverError () {
-    return {
-      statusCode: 500
-    }
-  }
-}
-
-class MissingParamError extends Error {
-  constructor (paramName) {
-    super(`Missing param: ${paramName}`)
-    this.name = 'MissingParamError'
-  }
-}
+const MathRouter = require('./math-router')
+const MissingParamError = require('../helpers/missing-param-error')
 
 describe('Math Router', () => {
   test('should return 400 if no id is provided', () => {
