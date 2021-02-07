@@ -1,4 +1,6 @@
 const HttpResponse = require('../helpers/http-response')
+const MissingParamError = require('../helpers/missing-param-error')
+const InvalidParamError = require('../helpers/invalid-param-error')
 
 module.exports = class MathRouter {
   constructor (mathUseCase) {
@@ -10,20 +12,20 @@ module.exports = class MathRouter {
       const { id, operation, left, right } = httpRequest.body
 
       if (!id) {
-        return HttpResponse.badRequest('id')
+        return HttpResponse.badRequest(new MissingParamError('id'))
       }
       if (!operation) {
-        return HttpResponse.badRequest('operation')
+        return HttpResponse.badRequest(new MissingParamError('operation'))
       }
       if (!left) {
-        return HttpResponse.badRequest('left')
+        return HttpResponse.badRequest(new MissingParamError('left'))
       }
       if (!right) {
-        return HttpResponse.badRequest('right')
+        return HttpResponse.badRequest(new MissingParamError('right'))
       }
 
       if (!this.mathUseCase.isOperationValid(operation)) {
-        return HttpResponse.badRequestInvalid('operation')
+        return HttpResponse.badRequest(new InvalidParamError('operation'))
       }
 
       const result = this.mathUseCase.calculate(id, operation, left, right)
