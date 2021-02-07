@@ -32,7 +32,7 @@ module.exports = class MathRouter {
 
       return HttpResponse.ok(result)
     } catch (e) {
-      // console.error(e)
+      console.error(e)
       return HttpResponse.serverError()
     }
   }
