@@ -125,4 +125,36 @@ describe('Math Router', () => {
     expect(httpResponse.statusCode).toEqual(400)
     expect(httpResponse.body).toEqual(new InvalidParamError('operation'))
   })
+
+  test('Should return 500 if no MathUseCase is provided', () => {
+    const sut = new MathRouter()
+    const httpRequest = {
+      body: {
+        id: 'any_id',
+        operation: 'any_operation',
+        left: 2,
+        right: 3
+      }
+    }
+
+    const httpResponse = sut.route(httpRequest)
+
+    expect(httpResponse.statusCode).toEqual(500)
+  })
+
+  test('Should return 500 if MathUseCase has no calculate method', () => {
+    const sut = new MathRouter({})
+    const httpRequest = {
+      body: {
+        id: 'any_id',
+        operation: 'any_operation',
+        left: 2,
+        right: 3
+      }
+    }
+
+    const httpResponse = sut.route(httpRequest)
+
+    expect(httpResponse.statusCode).toEqual(500)
+  })
 })

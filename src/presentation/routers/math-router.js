@@ -6,7 +6,7 @@ module.exports = class MathRouter {
   }
 
   route (httpRequest) {
-    if (!httpRequest || !httpRequest.body) {
+    if (!httpRequest || !httpRequest.body || !this.mathUseCase || !this.mathUseCase.calculate) {
       return HttpResponse.serverError()
     }
 
