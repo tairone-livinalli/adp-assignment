@@ -8,17 +8,38 @@
 class MathRouter {
   route (httpRequest) {
     if (!httpRequest || !httpRequest.body) {
-      return {
-        statusCode: 500
-      }
+      return HttpResponse.serverError()
     }
 
     const { id, operation } = httpRequest.body
-    if (!id || !operation) {
-      return {
-        statusCode: 400
-      }
+    if (!id) {
+      return HttpResponse.badRequest('id')
     }
+    if (!operation) {
+      return HttpResponse.badRequest('operation')
+    }
+  }
+}
+
+class HttpResponse {
+  static badRequest (paramName) {
+    return {
+      statusCode: 400,
+      body: new MissingParamError(paramName)
+    }
+  }
+
+  static serverError () {
+    return {
+      statusCode: 500
+    }
+  }
+}
+
+class MissingParamError extends Error {
+  constructor (paramName) {
+    super(`Missing param: ${paramName}`)
+    this.name = 'MissingParamError'
   }
 }
 
@@ -34,6 +55,7 @@ describe('Math Router', () => {
     }
     const httpResponse = sut.route(httpRequest)
     expect(httpResponse.statusCode).toBe(400)
+    expect(httpResponse.body).toEqual(new MissingParamError('id'))
   })
 
   test('should return 400 if no operation is provided', () => {
@@ -47,6 +69,7 @@ describe('Math Router', () => {
     }
     const httpResponse = sut.route(httpRequest)
     expect(httpResponse.statusCode).toBe(400)
+    expect(httpResponse.body).toEqual(new MissingParamError('operation'))
   })
 
   test('should return 500 if no httpRequest is provided', () => {
