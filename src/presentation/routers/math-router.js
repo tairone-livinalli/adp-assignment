@@ -29,8 +29,8 @@ module.exports = class MathRouter {
       return HttpResponse.badRequestInvalid('operation')
     }
 
-    this.mathUseCase.calculate(id, operation, left, right)
+    const result = this.mathUseCase.calculate(id, operation, left, right)
 
-    return HttpResponse.ok()
+    return HttpResponse.ok(result)
   }
 }

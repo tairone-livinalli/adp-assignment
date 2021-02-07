@@ -9,6 +9,10 @@ const makeSut = () => {
       this.operation = operation
       this.left = left
       this.right = right
+
+      const result = this.left * this.right
+
+      return { id, result }
     }
 
     isOperationValid () {
@@ -146,6 +150,8 @@ describe('Math Router', () => {
     const httpResponse = sut.route(httpRequest)
 
     expect(httpResponse.statusCode).toEqual(200)
+    expect(httpResponse.body.id).toEqual(httpRequest.body.id)
+    expect(httpResponse.body.result).toEqual(6)
   })
 
   test('Should return 500 if no MathUseCase is provided', () => {
