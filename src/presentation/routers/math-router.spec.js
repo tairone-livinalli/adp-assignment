@@ -7,6 +7,12 @@
 
 class MathRouter {
   route (httpRequest) {
+    if (!httpRequest || !httpRequest.body) {
+      return {
+        statusCode: 500
+      }
+    }
+
     const { id, operation } = httpRequest.body
     if (!id || !operation) {
       return {
@@ -41,5 +47,17 @@ describe('Math Router', () => {
     }
     const httpResponse = sut.route(httpRequest)
     expect(httpResponse.statusCode).toBe(400)
+  })
+
+  test('should return 500 if no httpRequest is provided', () => {
+    const sut = new MathRouter()
+    const httpResponse = sut.route()
+    expect(httpResponse.statusCode).toBe(500)
+  })
+
+  test('should return 500 if httpRequest has no body', () => {
+    const sut = new MathRouter()
+    const httpResponse = sut.route({})
+    expect(httpResponse.statusCode).toBe(500)
   })
 })
