@@ -11,12 +11,19 @@ class MathRouter {
       return HttpResponse.serverError()
     }
 
-    const { id, operation } = httpRequest.body
+    const { id, operation, left, right } = httpRequest.body
+
     if (!id) {
       return HttpResponse.badRequest('id')
     }
     if (!operation) {
       return HttpResponse.badRequest('operation')
+    }
+    if (!left) {
+      return HttpResponse.badRequest('left')
+    }
+    if (!right) {
+      return HttpResponse.badRequest('right')
     }
   }
 }
@@ -70,6 +77,34 @@ describe('Math Router', () => {
     const httpResponse = sut.route(httpRequest)
     expect(httpResponse.statusCode).toBe(400)
     expect(httpResponse.body).toEqual(new MissingParamError('operation'))
+  })
+
+  test('should return 400 if no left operator is provided', () => {
+    const sut = new MathRouter()
+    const httpRequest = {
+      body: {
+        id: '66df7d3d-8340-4efd-a528-b5204d02a864',
+        operation: 'multiplication',
+        right: -6634491299249283
+      }
+    }
+    const httpResponse = sut.route(httpRequest)
+    expect(httpResponse.statusCode).toBe(400)
+    expect(httpResponse.body).toEqual(new MissingParamError('left'))
+  })
+
+  test('should return 400 if no right operator is provided', () => {
+    const sut = new MathRouter()
+    const httpRequest = {
+      body: {
+        id: '66df7d3d-8340-4efd-a528-b5204d02a864',
+        operation: 'multiplication',
+        left: -3364257091338055
+      }
+    }
+    const httpResponse = sut.route(httpRequest)
+    expect(httpResponse.statusCode).toBe(400)
+    expect(httpResponse.body).toEqual(new MissingParamError('right'))
   })
 
   test('should return 500 if no httpRequest is provided', () => {
