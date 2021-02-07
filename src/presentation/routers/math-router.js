@@ -1,6 +1,10 @@
 const HttpResponse = require('../helpers/http-response')
 
 module.exports = class MathRouter {
+  constructor (mathUseCase) {
+    this.mathUseCase = mathUseCase
+  }
+
   route (httpRequest) {
     if (!httpRequest || !httpRequest.body) {
       return HttpResponse.serverError()
@@ -20,5 +24,7 @@ module.exports = class MathRouter {
     if (!right) {
       return HttpResponse.badRequest('right')
     }
+
+    this.mathUseCase.calculate(id, operation, left, right)
   }
 }

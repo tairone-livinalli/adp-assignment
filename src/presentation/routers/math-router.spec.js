@@ -2,12 +2,27 @@ const MathRouter = require('./math-router')
 const MissingParamError = require('../helpers/missing-param-error')
 
 const makeSut = () => {
-  return new MathRouter()
+  class MathUseCaseSpy {
+    calculate (id, operation, left, right) {
+      this.id = id
+      this.operation = operation
+      this.left = left
+      this.right = right
+    }
+  }
+
+  const mathUseCaseSpy = new MathUseCaseSpy()
+  const sut = new MathRouter(mathUseCaseSpy)
+
+  return {
+    sut,
+    mathUseCaseSpy
+  }
 }
 
 describe('Math Router', () => {
   test('should return 400 if no id is provided', () => {
-    const sut = makeSut()
+    const { sut } = makeSut()
     const httpRequest = {
       body: {
         operation: 'multiplication',
@@ -21,7 +36,7 @@ describe('Math Router', () => {
   })
 
   test('should return 400 if no operation is provided', () => {
-    const sut = makeSut()
+    const { sut } = makeSut()
     const httpRequest = {
       body: {
         id: '66df7d3d-8340-4efd-a528-b5204d02a864',
@@ -35,7 +50,7 @@ describe('Math Router', () => {
   })
 
   test('should return 400 if no left operator is provided', () => {
-    const sut = makeSut()
+    const { sut } = makeSut()
     const httpRequest = {
       body: {
         id: '66df7d3d-8340-4efd-a528-b5204d02a864',
@@ -49,7 +64,7 @@ describe('Math Router', () => {
   })
 
   test('should return 400 if no right operator is provided', () => {
-    const sut = makeSut()
+    const { sut } = makeSut()
     const httpRequest = {
       body: {
         id: '66df7d3d-8340-4efd-a528-b5204d02a864',
@@ -63,14 +78,33 @@ describe('Math Router', () => {
   })
 
   test('should return 500 if no httpRequest is provided', () => {
-    const sut = makeSut()
+    const { sut } = makeSut()
     const httpResponse = sut.route()
     expect(httpResponse.statusCode).toBe(500)
   })
 
   test('should return 500 if httpRequest has no body', () => {
-    const sut = makeSut()
+    const { sut } = makeSut()
     const httpResponse = sut.route({})
     expect(httpResponse.statusCode).toBe(500)
+  })
+
+  test('should call MathUseCase with correct params', () => {
+    const { sut, mathUseCaseSpy } = makeSut()
+    const httpRequest = {
+      body: {
+        id: '66df7d3d-8340-4efd-a528-b5204d02a864',
+        operation: 'multiplication',
+        left: -3364257091338055,
+        right: -6634491299249283
+      }
+    }
+
+    sut.route(httpRequest)
+
+    expect(mathUseCaseSpy.id).toEqual(httpRequest.body.id)
+    expect(mathUseCaseSpy.operation).toEqual(httpRequest.body.operation)
+    expect(mathUseCaseSpy.left).toEqual(httpRequest.body.left)
+    expect(mathUseCaseSpy.right).toEqual(httpRequest.body.right)
   })
 })
