@@ -1,6 +1,7 @@
 const MathRouter = require('./math-router')
 const MissingParamError = require('../helpers/missing-param-error')
 const InvalidParamError = require('../helpers/invalid-param-error')
+const ServerError = require('../helpers/server-error')
 
 const makeSut = () => {
   class MathUseCaseSpy {
@@ -17,6 +18,26 @@ const makeSut = () => {
 
     isOperationValid () {
       return true
+    }
+  }
+
+  const mathUseCaseSpy = new MathUseCaseSpy()
+  const sut = new MathRouter(mathUseCaseSpy)
+
+  return {
+    sut,
+    mathUseCaseSpy
+  }
+}
+
+const makeSutWithError = () => {
+  class MathUseCaseSpy {
+    calculate () {
+      throw new Error()
+    }
+
+    isOperationValid () {
+      throw new Error()
     }
   }
 
@@ -90,12 +111,14 @@ describe('Math Router', () => {
     const { sut } = makeSut()
     const httpResponse = sut.route()
     expect(httpResponse.statusCode).toBe(500)
+    expect(httpResponse.body).toEqual(new ServerError())
   })
 
   test('Should return 500 if httpRequest has no body', () => {
     const { sut } = makeSut()
     const httpResponse = sut.route({})
     expect(httpResponse.statusCode).toBe(500)
+    expect(httpResponse.body).toEqual(new ServerError())
   })
 
   test('Should call MathUseCase with correct params', () => {
@@ -168,6 +191,7 @@ describe('Math Router', () => {
     const httpResponse = sut.route(httpRequest)
 
     expect(httpResponse.statusCode).toEqual(500)
+    expect(httpResponse.body).toEqual(new ServerError())
   })
 
   test('Should return 500 if MathUseCase has no calculate method', () => {
@@ -184,6 +208,7 @@ describe('Math Router', () => {
     const httpResponse = sut.route(httpRequest)
 
     expect(httpResponse.statusCode).toEqual(500)
+    expect(httpResponse.body).toEqual(new ServerError())
   })
 
   test('Should return 500 if MathUseCase has no isOperationValid method', () => {
@@ -201,5 +226,23 @@ describe('Math Router', () => {
     const httpResponse = sut.route(httpRequest)
 
     expect(httpResponse.statusCode).toEqual(500)
+    expect(httpResponse.body).toEqual(new ServerError())
+  })
+
+  test('Should return 500 if MathUseCase throws', () => {
+    const { sut } = makeSutWithError()
+    const httpRequest = {
+      body: {
+        id: 'any_id',
+        operation: 'any_operation',
+        left: 2,
+        right: 3
+      }
+    }
+
+    const httpResponse = sut.route(httpRequest)
+
+    expect(httpResponse.statusCode).toEqual(500)
+    expect(httpResponse.body).toEqual(new ServerError())
   })
 })
