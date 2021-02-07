@@ -21,13 +21,13 @@ const makeSut = () => {
 }
 
 describe('Math Router', () => {
-  test('should return 400 if no id is provided', () => {
+  test('Should return 400 if no id is provided', () => {
     const { sut } = makeSut()
     const httpRequest = {
       body: {
         operation: 'multiplication',
-        left: -3364257091338055,
-        right: -6634491299249283
+        left: 2,
+        right: 3
       }
     }
     const httpResponse = sut.route(httpRequest)
@@ -35,13 +35,13 @@ describe('Math Router', () => {
     expect(httpResponse.body).toEqual(new MissingParamError('id'))
   })
 
-  test('should return 400 if no operation is provided', () => {
+  test('Should return 400 if no operation is provided', () => {
     const { sut } = makeSut()
     const httpRequest = {
       body: {
-        id: '66df7d3d-8340-4efd-a528-b5204d02a864',
-        left: -3364257091338055,
-        right: -6634491299249283
+        id: 'valid_id',
+        left: 2,
+        right: 3
       }
     }
     const httpResponse = sut.route(httpRequest)
@@ -49,13 +49,13 @@ describe('Math Router', () => {
     expect(httpResponse.body).toEqual(new MissingParamError('operation'))
   })
 
-  test('should return 400 if no left operator is provided', () => {
+  test('Should return 400 if no left operator is provided', () => {
     const { sut } = makeSut()
     const httpRequest = {
       body: {
-        id: '66df7d3d-8340-4efd-a528-b5204d02a864',
+        id: 'valid_id',
         operation: 'multiplication',
-        right: -6634491299249283
+        right: 3
       }
     }
     const httpResponse = sut.route(httpRequest)
@@ -63,13 +63,13 @@ describe('Math Router', () => {
     expect(httpResponse.body).toEqual(new MissingParamError('left'))
   })
 
-  test('should return 400 if no right operator is provided', () => {
+  test('Should return 400 if no right operator is provided', () => {
     const { sut } = makeSut()
     const httpRequest = {
       body: {
-        id: '66df7d3d-8340-4efd-a528-b5204d02a864',
+        id: 'valid_id',
         operation: 'multiplication',
-        left: -3364257091338055
+        left: 2
       }
     }
     const httpResponse = sut.route(httpRequest)
@@ -77,26 +77,26 @@ describe('Math Router', () => {
     expect(httpResponse.body).toEqual(new MissingParamError('right'))
   })
 
-  test('should return 500 if no httpRequest is provided', () => {
+  test('Should return 500 if no httpRequest is provided', () => {
     const { sut } = makeSut()
     const httpResponse = sut.route()
     expect(httpResponse.statusCode).toBe(500)
   })
 
-  test('should return 500 if httpRequest has no body', () => {
+  test('Should return 500 if httpRequest has no body', () => {
     const { sut } = makeSut()
     const httpResponse = sut.route({})
     expect(httpResponse.statusCode).toBe(500)
   })
 
-  test('should call MathUseCase with correct params', () => {
+  test('Should call MathUseCase with correct params', () => {
     const { sut, mathUseCaseSpy } = makeSut()
     const httpRequest = {
       body: {
-        id: '66df7d3d-8340-4efd-a528-b5204d02a864',
+        id: 'valid_id',
         operation: 'multiplication',
-        left: -3364257091338055,
-        right: -6634491299249283
+        left: 2,
+        right: 3
       }
     }
 
@@ -106,5 +106,21 @@ describe('Math Router', () => {
     expect(mathUseCaseSpy.operation).toEqual(httpRequest.body.operation)
     expect(mathUseCaseSpy.left).toEqual(httpRequest.body.left)
     expect(mathUseCaseSpy.right).toEqual(httpRequest.body.right)
+  })
+
+  test('Should return 400 when an invalid operation is provided', () => {
+    const { sut } = makeSut()
+    const httpRequest = {
+      body: {
+        id: 'valid_id',
+        operation: 'invalid_operation',
+        left: 2,
+        right: 3
+      }
+    }
+
+    const httpResponse = sut.route(httpRequest)
+
+    expect(httpResponse.statusCode).toEqual(400)
   })
 })
