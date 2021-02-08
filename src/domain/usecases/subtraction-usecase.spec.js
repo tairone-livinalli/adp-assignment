@@ -33,4 +33,10 @@ describe('Subtraction UseCase', () => {
     const result = sut.sub(5, 3)
     expect(result).toEqual(2)
   })
+
+  test('Should sub with negative left operator', () => {
+    const sut = makeSut()
+    const result = sut.sub(-1104576416323731, 2544567524349817)
+    expect(result).toEqual(-3649143940673548)
+  })
 })
