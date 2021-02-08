@@ -1,12 +1,13 @@
 const { MissingParamError, InvalidParamError } = require('../../utils/errors')
 
 class MathUseCase {
-  constructor (additionUseCase, subtractionUseCase, multiplicationUseCase, divisionUseCase) {
+  constructor (additionUseCase, subtractionUseCase, multiplicationUseCase, divisionUseCase, remainderUseCase) {
     this.validOperations = ['addition', 'subtraction', 'multiplication', 'division', 'remainder']
     this.additionUseCase = additionUseCase
     this.subtractionUseCase = subtractionUseCase
     this.multiplicationUseCase = multiplicationUseCase
     this.divisionUseCase = divisionUseCase
+    this.remainderUseCase = remainderUseCase
   }
 
   calculate (id, operation, left, right) {
@@ -58,6 +59,14 @@ class MathUseCase {
       throw new InvalidParamError('divisionUseCase')
     }
 
+    if (!this.remainderUseCase) {
+      throw new MissingParamError('remainderUseCase')
+    }
+
+    if (!this.remainderUseCase.rest) {
+      throw new InvalidParamError('remainderUseCase')
+    }
+
     this.left = left
     this.right = right
 
@@ -78,6 +87,10 @@ class MathUseCase {
 
   division () {
     this.divisionUseCase.divide(this.left, this.right)
+  }
+
+  remainder () {
+    this.remainderUseCase.rest(this.left, this.right)
   }
 
   isOperationValid (operation) {
@@ -110,18 +123,26 @@ const makeSut = () => {
       this.right = right
     }
   }
+  class RemainderUseCaseSpy {
+    rest (left, right) {
+      this.left = left
+      this.right = right
+    }
+  }
   const additionUseCaseSpy = new AdditionUseCaseSpy()
   const subtractionUseCaseSpy = new SubtractionUseCaseSpy()
   const multiplicationUseCaseSpy = new MultiplicationUseCaseSpy()
   const divisionUseCaseSpy = new DivisionUseCaseSpy()
-  const sut = new MathUseCase(additionUseCaseSpy, subtractionUseCaseSpy, multiplicationUseCaseSpy, divisionUseCaseSpy)
+  const remainderUseCaseSpy = new RemainderUseCaseSpy()
+  const sut = new MathUseCase(additionUseCaseSpy, subtractionUseCaseSpy, multiplicationUseCaseSpy, divisionUseCaseSpy, remainderUseCaseSpy)
 
   return {
     sut,
     additionUseCaseSpy,
     subtractionUseCaseSpy,
     multiplicationUseCaseSpy,
-    divisionUseCaseSpy
+    divisionUseCaseSpy,
+    remainderUseCaseSpy
   }
 }
 
@@ -273,5 +294,27 @@ describe('Math UseCase', () => {
   test('Should throw if no DivisionUseCase has no sub method', () => {
     const sut = new MathUseCase({ add: {} }, { sub: {} }, { multiply: {} }, {})
     expect(() => sut.calculate('id', 'division', 'left', 'right')).toThrow(new InvalidParamError('divisionUseCase'))
+  })
+
+  test('Should call RemainderUseCase with correct left operator if remainder operation is provided', () => {
+    const { sut, remainderUseCaseSpy } = makeSut()
+    sut.calculate('id', 'remainder', 'left', 'right')
+    expect(remainderUseCaseSpy.left).toEqual('left')
+  })
+
+  test('Should call RemainderUseCase with correct right operator if remainder operation is provided', () => {
+    const { sut, remainderUseCaseSpy } = makeSut()
+    sut.calculate('id', 'remainder', 'left', 'right')
+    expect(remainderUseCaseSpy.right).toEqual('right')
+  })
+
+  test('Should throw if no RemainderUseCase is provided', () => {
+    const sut = new MathUseCase({ add: {} }, { sub: {} }, { multiply: {} }, { divide: {} })
+    expect(() => sut.calculate('id', 'remainder', 'left', 'right')).toThrow(new MissingParamError('remainderUseCase'))
+  })
+
+  test('Should throw if no RemainderUseCase has no sub method', () => {
+    const sut = new MathUseCase({ add: {} }, { sub: {} }, { multiply: {} }, { divide: {} }, {})
+    expect(() => sut.calculate('id', 'remainder', 'left', 'right')).toThrow(new InvalidParamError('remainderUseCase'))
   })
 })
