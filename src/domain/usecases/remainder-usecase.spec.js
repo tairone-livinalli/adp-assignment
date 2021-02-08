@@ -45,4 +45,10 @@ describe('Remainder UseCase', () => {
     const result = sut.rest(8773915326797283, -7420122351257453)
     expect(result).toEqual(1353792975539830)
   })
+
+  test('Should get the rest of two negative numbers', () => {
+    const sut = makeSut()
+    const result = sut.rest(-8773915326797283, -7420122351257453)
+    expect(result).toEqual(-1353792975539830)
+  })
 })
