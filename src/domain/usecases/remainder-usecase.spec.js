@@ -1,19 +1,7 @@
 const { MissingParamError } = require('../../utils/errors')
+const RemainderUseCase = require('./remainder-usecase')
 
 const makeSut = () => {
-  class RemainderUseCase {
-    rest (left, right) {
-      if (!left) {
-        throw new MissingParamError('left')
-      }
-      if (!right) {
-        throw new MissingParamError('right')
-      }
-
-      return left % right
-    }
-  }
-
   return new RemainderUseCase()
 }
 
