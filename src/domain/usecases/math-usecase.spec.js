@@ -1,9 +1,10 @@
 const { MissingParamError, InvalidParamError } = require('../../utils/errors')
 
 class MathUseCase {
-  constructor (additionUseCase) {
+  constructor (additionUseCase, subtractionUseCase) {
     this.validOperations = ['addition', 'subtraction', 'multiplication', 'division', 'remainder']
     this.additionUseCase = additionUseCase
+    this.subtractionUseCase = subtractionUseCase
   }
 
   calculate (id, operation, left, right) {
@@ -31,7 +32,18 @@ class MathUseCase {
       throw new InvalidParamError('additionUseCase')
     }
 
-    this.additionUseCase.add(left, right)
+    this.left = left
+    this.right = right
+
+    this[operation]()
+  }
+
+  addition () {
+    this.additionUseCase.add(this.left, this.right)
+  }
+
+  subtraction () {
+    this.subtractionUseCase.sub(this.left)
   }
 
   isOperationValid (operation) {
@@ -46,12 +58,19 @@ const makeSut = () => {
       this.right = right
     }
   }
+  class SubtractionUseCaseSpy {
+    sub (left) {
+      this.left = left
+    }
+  }
   const additionUseCaseSpy = new AdditionUseCaseSpy()
-  const sut = new MathUseCase(additionUseCaseSpy)
+  const subtractionUseCaseSpy = new SubtractionUseCaseSpy()
+  const sut = new MathUseCase(additionUseCaseSpy, subtractionUseCaseSpy)
 
   return {
     sut,
-    additionUseCaseSpy
+    additionUseCaseSpy,
+    subtractionUseCaseSpy
   }
 }
 
@@ -137,5 +156,11 @@ describe('Math UseCase', () => {
   test('Should throw if no AdditionUseCase has no add method', () => {
     const sut = new MathUseCase({})
     expect(() => sut.calculate('id', 'addition', 'left', 'right')).toThrow(new InvalidParamError('additionUseCase'))
+  })
+
+  test('Should call SubtractionUseCase with correct left operator if subtraction operation is provided', () => {
+    const { sut, subtractionUseCaseSpy } = makeSut()
+    sut.calculate('id', 'subtraction', 'left', 'right')
+    expect(subtractionUseCaseSpy.left).toEqual('left')
   })
 })
