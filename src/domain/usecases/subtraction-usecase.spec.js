@@ -9,6 +9,8 @@ const makeSut = () => {
       if (!right) {
         throw new MissingParamError('right')
       }
+
+      return left - right
     }
   }
 
@@ -24,5 +26,11 @@ describe('Subtraction UseCase', () => {
   test('Should throw if no right operator is provided', () => {
     const sut = makeSut()
     expect(() => sut.sub('left')).toThrow(new MissingParamError('right'))
+  })
+
+  test('Should sub with two positive numbers', () => {
+    const sut = makeSut()
+    const result = sut.sub(5, 3)
+    expect(result).toEqual(2)
   })
 })
