@@ -33,4 +33,10 @@ describe('Division UseCase', () => {
     const result = sut.divide(10, 5)
     expect(result).toEqual(2)
   })
+
+  test('Should divide with negative left operator', () => {
+    const sut = makeSut()
+    const result = sut.divide(-4779009923225521, 5458112861418737)
+    expect(result).toEqual(-0.8755791689480207)
+  })
 })
