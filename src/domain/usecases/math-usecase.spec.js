@@ -6,7 +6,7 @@ const makeAdditionUseCase = () => {
     add (left, right) {
       this.left = left
       this.right = right
-      return 2
+      return true
     }
   }
 
@@ -18,7 +18,7 @@ const makeSubtractionUseCase = () => {
     sub (left, right) {
       this.left = left
       this.right = right
-      return 0
+      return true
     }
   }
 
@@ -30,7 +30,7 @@ const makeMultiplicationUseCase = () => {
     multiply (left, right) {
       this.left = left
       this.right = right
-      return 1
+      return true
     }
   }
 
@@ -42,7 +42,7 @@ const makeDivisionUseCase = () => {
     divide (left, right) {
       this.left = left
       this.right = right
-      return 1
+      return true
     }
   }
 
@@ -54,7 +54,7 @@ const makeRemainderUseCase = () => {
     rest (left, right) {
       this.left = left
       this.right = right
-      return 0
+      return true
     }
   }
 
@@ -288,36 +288,36 @@ describe('Math UseCase', () => {
 
   test('Should return a correct object if Addition operation is successfully called', () => {
     const { sut } = makeSut()
-    const additionResult = sut.calculate('id', 'addition', 1, 1)
+    const additionResult = sut.calculate('id', 'addition', 'left', 'right')
     expect(additionResult.id).toEqual(sut.id)
-    expect(additionResult.result).toEqual(2)
+    expect(additionResult.result).toBeTruthy()
   })
 
   test('Should return a correct object if Subtraction operation is successfully called', () => {
     const { sut } = makeSut()
-    const subtractionResult = sut.calculate('id', 'subtraction', 1, 1)
+    const subtractionResult = sut.calculate('id', 'subtraction', 'left', 'right')
     expect(subtractionResult.id).toEqual(sut.id)
-    expect(subtractionResult.result).toEqual(0)
+    expect(subtractionResult.result).toBeTruthy()
   })
 
   test('Should return a correct object if Multiplication operation is successfully called', () => {
     const { sut } = makeSut()
-    const multiplicationResult = sut.calculate('id', 'multiplication', 1, 1)
+    const multiplicationResult = sut.calculate('id', 'multiplication', 'left', 'right')
     expect(multiplicationResult.id).toEqual(sut.id)
-    expect(multiplicationResult.result).toEqual(1)
+    expect(multiplicationResult.result).toBeTruthy()
   })
 
   test('Should return a correct object if Division operation is successfully called', () => {
     const { sut } = makeSut()
-    const divisionResult = sut.calculate('id', 'division', 1, 1)
+    const divisionResult = sut.calculate('id', 'division', 'left', 'right')
     expect(divisionResult.id).toEqual(sut.id)
-    expect(divisionResult.result).toEqual(1)
+    expect(divisionResult.result).toBeTruthy()
   })
 
   test('Should return a correct object if Remainder operation is successfully called', () => {
     const { sut } = makeSut()
-    const remainderResult = sut.calculate('id', 'remainder', 1, 1)
+    const remainderResult = sut.calculate('id', 'remainder', 'left', 'right')
     expect(remainderResult.id).toEqual(sut.id)
-    expect(remainderResult.result).toEqual(0)
+    expect(remainderResult.result).toBeTruthy()
   })
 })
