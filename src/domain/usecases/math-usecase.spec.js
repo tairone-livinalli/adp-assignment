@@ -1,7 +1,7 @@
 const { MissingParamError } = require('../../utils/errors')
 
 class MathUseCase {
-  calculate (id, operation, left) {
+  calculate (id, operation, left, right) {
     if (!id) {
       throw new MissingParamError('id')
     }
@@ -10,6 +10,9 @@ class MathUseCase {
     }
     if (!left) {
       throw new MissingParamError('left')
+    }
+    if (!right) {
+      throw new MissingParamError('right')
     }
   }
 }
@@ -28,5 +31,10 @@ describe('Math UseCase', () => {
   test('Should throw if no left operator is provided', () => {
     const sut = new MathUseCase()
     expect(() => sut.calculate('id', 'operation')).toThrow(new MissingParamError('left'))
+  })
+
+  test('Should throw if no right operator is provided', () => {
+    const sut = new MathUseCase()
+    expect(() => sut.calculate('id', 'operation', 'left')).toThrow(new MissingParamError('right'))
   })
 })
