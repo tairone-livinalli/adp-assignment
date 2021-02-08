@@ -2,8 +2,9 @@
   "name": "adp-assignment",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/main/index.js",
   "scripts": {
+    "start": "node src/main/index.js",
     "lint": "standard --fix",
     "test": "jest --silent --colors --noStackTrace --passWithNoTests",
     "test:unit": "npm run test -- --watch -c jest-unit-config.js",
@@ -12,7 +13,9 @@
     "test:ci": "npm run test -- --coverage"
   },
   "standard": {
-    "env": ["jest"]
+    "env": [
+      "jest"
+    ]
   },
   "repository": {
     "type": "git",
@@ -30,5 +33,8 @@
     "jest": "^26.6.3",
     "lint-staged": "^10.5.4",
     "standard": "^16.0.3"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
   }
 }
