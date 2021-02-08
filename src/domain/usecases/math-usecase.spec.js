@@ -31,7 +31,7 @@ class MathUseCase {
       throw new InvalidParamError('additionUseCase')
     }
 
-    this.additionUseCase.add(left)
+    this.additionUseCase.add(left, right)
   }
 
   isOperationValid (operation) {
@@ -41,8 +41,9 @@ class MathUseCase {
 
 const makeSut = () => {
   class AdditionUseCaseSpy {
-    add (left) {
+    add (left, right) {
       this.left = left
+      this.right = right
     }
   }
   const additionUseCaseSpy = new AdditionUseCaseSpy()
@@ -120,6 +121,12 @@ describe('Math UseCase', () => {
     const { sut, additionUseCaseSpy } = makeSut()
     sut.calculate('id', 'addition', 'left', 'right')
     expect(additionUseCaseSpy.left).toEqual('left')
+  })
+
+  test('Should call AdditionUseCase with correct right operator if addition operation is provided', () => {
+    const { sut, additionUseCaseSpy } = makeSut()
+    sut.calculate('id', 'addition', 'left', 'right')
+    expect(additionUseCaseSpy.right).toEqual('right')
   })
 
   test('Should throw if no AdditionUseCase is provided', () => {
