@@ -1,19 +1,7 @@
 const { MissingParamError } = require('../../utils/errors')
+const DivisionUseCase = require('./division-usecase')
 
 const makeSut = () => {
-  class DivisionUseCase {
-    divide (left, right) {
-      if (!left) {
-        throw new MissingParamError('left')
-      }
-      if (!right) {
-        throw new MissingParamError('right')
-      }
-
-      return left / right
-    }
-  }
-
   return new DivisionUseCase()
 }
 
