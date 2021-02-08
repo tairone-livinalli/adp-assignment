@@ -42,6 +42,7 @@ const makeDivisionUseCase = () => {
     divide (left, right) {
       this.left = left
       this.right = right
+      return 1
     }
   }
 
@@ -303,5 +304,12 @@ describe('Math UseCase', () => {
     const multiplicationResult = sut.calculate('id', 'multiplication', 1, 1)
     expect(multiplicationResult.id).toEqual(sut.id)
     expect(multiplicationResult.result).toEqual(1)
+  })
+
+  test('Should return a correct object if Division operation is successfully called', () => {
+    const { sut } = makeSut()
+    const divisionResult = sut.calculate('id', 'division', 1, 1)
+    expect(divisionResult.id).toEqual(sut.id)
+    expect(divisionResult.result).toEqual(1)
   })
 })
