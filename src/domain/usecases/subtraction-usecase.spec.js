@@ -39,4 +39,10 @@ describe('Subtraction UseCase', () => {
     const result = sut.sub(-1104576416323731, 2544567524349817)
     expect(result).toEqual(-3649143940673548)
   })
+
+  test('Should sub with negative right operator', () => {
+    const sut = makeSut()
+    const result = sut.sub(7545560836307161, -8376690551836207)
+    expect(result).toEqual(15922251388143368)
+  })
 })
