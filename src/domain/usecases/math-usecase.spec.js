@@ -18,9 +18,13 @@ class MathUseCase {
     if (!right) {
       throw new MissingParamError('right')
     }
-    if (!this.validOperations.includes(operation)) {
+    if (!this.isOperationValid(operation)) {
       throw new InvalidParamError('operation')
     }
+  }
+
+  isOperationValid (operation) {
+    return this.validOperations.includes(operation)
   }
 }
 
@@ -48,5 +52,11 @@ describe('Math UseCase', () => {
   test('Should throw if an invalid operation is provided', () => {
     const sut = new MathUseCase()
     expect(() => sut.calculate('id', 'operation', 'left', 'right')).toThrow(new InvalidParamError('operation'))
+  })
+
+  test('Should return false if an invalid operation is provided to validate operation method', () => {
+    const sut = new MathUseCase()
+    const isOperationValid = sut.isOperationValid('operation')
+    expect(isOperationValid).toBe(false)
   })
 })
