@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node src/main/index.js",
     "lint": "standard --fix",
-    "test": "jest --silent --colors --noStackTrace --passWithNoTests",
+    "test": "jest --silent --colors --noStackTrace --passWithNoTests --runInBand",
     "test:unit": "npm run test -- --watch -c jest-unit-config.js",
     "test:integration": "npm run test -- --watch -c jest-integration-config.js",
     "test:staged": "npm run test -- --findRelatedTests --silent",
