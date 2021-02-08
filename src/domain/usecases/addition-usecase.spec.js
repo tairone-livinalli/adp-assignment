@@ -28,15 +28,21 @@ describe('Addition UseCase', () => {
     expect(() => sut.add('left')).toThrow(new MissingParamError('right'))
   })
 
-  test('Should successfully add if called with positive numbers', () => {
+  test('Should add if called with positive numbers', () => {
     const sut = makeSut()
     const result = sut.add(2, 3)
     expect(result).toEqual(5)
   })
 
-  test('Should successfully add if called with large positive numbers', () => {
+  test('Should add if called with large positive numbers', () => {
     const sut = makeSut()
     const result = sut.add(4023771758034621, 6786420380259905)
     expect(result).toEqual(10810192138294526)
+  })
+
+  test('Should add if called with negative left operator', () => {
+    const sut = makeSut()
+    const result = sut.add(-3937124165523131, 8138589928066581)
+    expect(result).toEqual(4201465762543450)
   })
 })
