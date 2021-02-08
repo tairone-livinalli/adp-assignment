@@ -1,6 +1,10 @@
-const { MissingParamError } = require('../../utils/errors')
+const { MissingParamError, InvalidParamError } = require('../../utils/errors')
 
 class MathUseCase {
+  constructor () {
+    this.validOperations = ['addition', 'subtraction', 'multiplication', 'division', 'remainder']
+  }
+
   calculate (id, operation, left, right) {
     if (!id) {
       throw new MissingParamError('id')
@@ -13,6 +17,9 @@ class MathUseCase {
     }
     if (!right) {
       throw new MissingParamError('right')
+    }
+    if (!this.validOperations.includes(operation)) {
+      throw new InvalidParamError('operation')
     }
   }
 }
@@ -36,5 +43,10 @@ describe('Math UseCase', () => {
   test('Should throw if no right operator is provided', () => {
     const sut = new MathUseCase()
     expect(() => sut.calculate('id', 'operation', 'left')).toThrow(new MissingParamError('right'))
+  })
+
+  test('Should throw if an invalid operation is provided', () => {
+    const sut = new MathUseCase()
+    expect(() => sut.calculate('id', 'operation', 'left', 'right')).toThrow(new InvalidParamError('operation'))
   })
 })
