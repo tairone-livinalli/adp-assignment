@@ -18,6 +18,7 @@ const makeSubtractionUseCase = () => {
     sub (left, right) {
       this.left = left
       this.right = right
+      return 0
     }
   }
 
@@ -287,5 +288,12 @@ describe('Math UseCase', () => {
     const additionResult = sut.calculate('id', 'addition', 1, 1)
     expect(additionResult.id).toEqual(sut.id)
     expect(additionResult.result).toEqual(2)
+  })
+
+  test('Should return a correct object if Subtraction operation is successfully called', () => {
+    const { sut } = makeSut()
+    const subtraction = sut.calculate('id', 'subtraction', 1, 1)
+    expect(subtraction.id).toEqual(sut.id)
+    expect(subtraction.result).toEqual(0)
   })
 })
