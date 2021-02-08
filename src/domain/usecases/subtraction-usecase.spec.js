@@ -1,19 +1,7 @@
 const { MissingParamError } = require('../../utils/errors')
+const SubtractionUseCase = require('./subtraction-usecase')
 
 const makeSut = () => {
-  class SubtractionUseCase {
-    sub (left, right) {
-      if (!left) {
-        throw new MissingParamError('left')
-      }
-      if (!right) {
-        throw new MissingParamError('right')
-      }
-
-      return left - right
-    }
-  }
-
   return new SubtractionUseCase()
 }
 
