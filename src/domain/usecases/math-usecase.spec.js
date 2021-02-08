@@ -67,7 +67,13 @@ const makeSut = () => {
   const multiplicationUseCaseSpy = makeMultiplicationUseCase()
   const divisionUseCaseSpy = makeDivisionUseCase()
   const remainderUseCaseSpy = makeRemainderUseCase()
-  const sut = new MathUseCase(additionUseCaseSpy, subtractionUseCaseSpy, multiplicationUseCaseSpy, divisionUseCaseSpy, remainderUseCaseSpy)
+  const sut = new MathUseCase({
+    additionUseCase: additionUseCaseSpy,
+    subtractionUseCase: subtractionUseCaseSpy,
+    multiplicationUseCase: multiplicationUseCaseSpy,
+    divisionUseCase: divisionUseCaseSpy,
+    remainderUseCase: remainderUseCaseSpy
+  })
 
   return {
     sut,
@@ -161,12 +167,12 @@ describe('Math UseCase', () => {
   })
 
   test('Should throw if no AdditionUseCase is provided', () => {
-    const sut = new MathUseCase()
+    const sut = new MathUseCase({})
     expect(() => sut.calculate('id', 'addition', 'left', 'right')).toThrow(new MissingParamError('additionUseCase'))
   })
 
   test('Should throw if no AdditionUseCase has no add method', () => {
-    const sut = new MathUseCase({})
+    const sut = new MathUseCase({ additionUseCase: {} })
     expect(() => sut.calculate('id', 'addition', 'left', 'right')).toThrow(new InvalidParamError('additionUseCase'))
   })
 
@@ -190,12 +196,12 @@ describe('Math UseCase', () => {
   })
 
   test('Should throw if no SubtractionUseCase is provided', () => {
-    const sut = new MathUseCase({ add: {} })
+    const sut = new MathUseCase({ additionUseCase: { add: {} } })
     expect(() => sut.calculate('id', 'subtraction', 'left', 'right')).toThrow(new MissingParamError('subtractionUseCase'))
   })
 
   test('Should throw if no SubtractionUseCase has no sub method', () => {
-    const sut = new MathUseCase({ add: {} }, {})
+    const sut = new MathUseCase({ additionUseCase: { add: {} }, subtractionUseCase: {} })
     expect(() => sut.calculate('id', 'subtraction', 'left', 'right')).toThrow(new InvalidParamError('subtractionUseCase'))
   })
 
@@ -219,12 +225,12 @@ describe('Math UseCase', () => {
   })
 
   test('Should throw if no MultiplicationUseCase is provided', () => {
-    const sut = new MathUseCase({ add: {} }, { sub: {} })
+    const sut = new MathUseCase({ additionUseCase: { add: {} }, subtractionUseCase: { sub: {} } })
     expect(() => sut.calculate('id', 'multiplication', 'left', 'right')).toThrow(new MissingParamError('multiplicationUseCase'))
   })
 
-  test('Should throw if no MultiplicationUseCase has no sub method', () => {
-    const sut = new MathUseCase({ add: {} }, { sub: {} }, { })
+  test('Should throw if no MultiplicationUseCase has no multiply method', () => {
+    const sut = new MathUseCase({ additionUseCase: { add: {} }, subtractionUseCase: { sub: {} }, multiplicationUseCase: {} })
     expect(() => sut.calculate('id', 'multiplication', 'left', 'right')).toThrow(new InvalidParamError('multiplicationUseCase'))
   })
 
@@ -248,12 +254,12 @@ describe('Math UseCase', () => {
   })
 
   test('Should throw if no DivisionUseCase is provided', () => {
-    const sut = new MathUseCase({ add: {} }, { sub: {} }, { multiply: {} })
+    const sut = new MathUseCase({ additionUseCase: { add: {} }, subtractionUseCase: { sub: {} }, multiplicationUseCase: { multiply: {} } })
     expect(() => sut.calculate('id', 'division', 'left', 'right')).toThrow(new MissingParamError('divisionUseCase'))
   })
 
   test('Should throw if no DivisionUseCase has no sub method', () => {
-    const sut = new MathUseCase({ add: {} }, { sub: {} }, { multiply: {} }, {})
+    const sut = new MathUseCase({ additionUseCase: { add: {} }, subtractionUseCase: { sub: {} }, multiplicationUseCase: { multiply: {} }, divisionUseCase: {} })
     expect(() => sut.calculate('id', 'division', 'left', 'right')).toThrow(new InvalidParamError('divisionUseCase'))
   })
 
@@ -277,12 +283,12 @@ describe('Math UseCase', () => {
   })
 
   test('Should throw if no RemainderUseCase is provided', () => {
-    const sut = new MathUseCase({ add: {} }, { sub: {} }, { multiply: {} }, { divide: {} })
+    const sut = new MathUseCase({ additionUseCase: { add: {} }, subtractionUseCase: { sub: {} }, multiplicationUseCase: { multiply: {} }, divisionUseCase: { divide: {} } })
     expect(() => sut.calculate('id', 'remainder', 'left', 'right')).toThrow(new MissingParamError('remainderUseCase'))
   })
 
   test('Should throw if no RemainderUseCase has no sub method', () => {
-    const sut = new MathUseCase({ add: {} }, { sub: {} }, { multiply: {} }, { divide: {} }, {})
+    const sut = new MathUseCase({ additionUseCase: { add: {} }, subtractionUseCase: { sub: {} }, multiplicationUseCase: { multiply: {} }, divisionUseCase: { divide: {} }, remainderUseCase: {} })
     expect(() => sut.calculate('id', 'remainder', 'left', 'right')).toThrow(new InvalidParamError('remainderUseCase'))
   })
 

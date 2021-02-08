@@ -1,7 +1,7 @@
 const { MissingParamError, InvalidParamError } = require('../../utils/errors')
 
 module.exports = class MathUseCase {
-  constructor (additionUseCase, subtractionUseCase, multiplicationUseCase, divisionUseCase, remainderUseCase) {
+  constructor ({ additionUseCase, subtractionUseCase, multiplicationUseCase, divisionUseCase, remainderUseCase }) {
     this.validOperations = ['addition', 'subtraction', 'multiplication', 'division', 'remainder']
     this.additionUseCase = additionUseCase
     this.subtractionUseCase = subtractionUseCase
