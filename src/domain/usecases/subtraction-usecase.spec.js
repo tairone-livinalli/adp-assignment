@@ -45,4 +45,10 @@ describe('Subtraction UseCase', () => {
     const result = sut.sub(7545560836307161, -8376690551836207)
     expect(result).toEqual(15922251388143368)
   })
+
+  test('Should sub with both negative numbers', () => {
+    const sut = makeSut()
+    const result = sut.sub(-7545560836307161, -8376690551836207)
+    expect(result).toEqual(831129715529046)
+  })
 })
