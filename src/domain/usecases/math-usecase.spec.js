@@ -13,12 +13,32 @@ const makeAdditionUseCase = () => {
   return new AdditionUseCaseSpy()
 }
 
+const makeAdditionUseCaseWithError = () => {
+  class AdditionUseCaseSpy {
+    add () {
+      throw new Error()
+    }
+  }
+
+  return new AdditionUseCaseSpy()
+}
+
 const makeSubtractionUseCase = () => {
   class SubtractionUseCaseSpy {
     sub (left, right) {
       this.left = left
       this.right = right
       return true
+    }
+  }
+
+  return new SubtractionUseCaseSpy()
+}
+
+const makeSubtractionUseCaseWithError = () => {
+  class SubtractionUseCaseSpy {
+    sub () {
+      throw new Error()
     }
   }
 
@@ -37,6 +57,16 @@ const makeMultiplicationUseCase = () => {
   return new MultiplicationUseCaseSpy()
 }
 
+const makeMultiplicationUseCaseWithError = () => {
+  class MultiplicationUseCaseSpy {
+    multiply () {
+      throw new Error()
+    }
+  }
+
+  return new MultiplicationUseCaseSpy()
+}
+
 const makeDivisionUseCase = () => {
   class DivisionUseCaseSpy {
     divide (left, right) {
@@ -49,12 +79,32 @@ const makeDivisionUseCase = () => {
   return new DivisionUseCaseSpy()
 }
 
+const makeDivisionUseCaseWithError = () => {
+  class DivisionUseCaseSpy {
+    divide () {
+      throw new Error()
+    }
+  }
+
+  return new DivisionUseCaseSpy()
+}
+
 const makeRemainderUseCase = () => {
   class RemainderUseCaseSpy {
     rest (left, right) {
       this.left = left
       this.right = right
       return true
+    }
+  }
+
+  return new RemainderUseCaseSpy()
+}
+
+const makeRemainderUseCaseWithError = () => {
+  class RemainderUseCaseSpy {
+    rest () {
+      throw new Error()
     }
   }
 
@@ -330,5 +380,24 @@ describe('Math UseCase', () => {
     const remainderResult = sut.calculate('id', 'remainder', 'left', 'right')
     expect(remainderResult.id).toEqual(sut.id)
     expect(remainderResult.result).toBeTruthy()
+  })
+
+  test('Should throw if any dependency throws', () => {
+    const additionUseCase = makeAdditionUseCase()
+    const subtractionUseCase = makeSubtractionUseCase()
+    const multiplicationUseCase = makeMultiplicationUseCase()
+    const divisionUseCase = makeDivisionUseCase()
+
+    const suts = [].concat(
+      new MathUseCase({ additionUseCase: makeAdditionUseCaseWithError() }),
+      new MathUseCase({ additionUseCase, subtractionUseCase: makeSubtractionUseCaseWithError() }),
+      new MathUseCase({ additionUseCase, subtractionUseCase, multiplicationUseCase: makeMultiplicationUseCaseWithError() }),
+      new MathUseCase({ additionUseCase, subtractionUseCase, multiplicationUseCase, divisionUseCase: makeDivisionUseCaseWithError() }),
+      new MathUseCase({ additionUseCase, subtractionUseCase, multiplicationUseCase, divisionUseCase, remainderUseCase: makeRemainderUseCaseWithError() })
+    )
+
+    for (const sut of suts) {
+      expect(sut.calculate).toThrow()
+    }
   })
 })
