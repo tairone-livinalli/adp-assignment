@@ -9,6 +9,8 @@ const makeSut = () => {
       if (!right) {
         throw new MissingParamError('right')
       }
+
+      return left % right
     }
   }
 
@@ -24,5 +26,11 @@ describe('Remainder UseCase', () => {
   test('Should throw if no right operator is provided', () => {
     const sut = makeSut()
     expect(() => sut.rest('left')).toThrow(new MissingParamError('right'))
+  })
+
+  test('Should get the rest of two positive numbers', () => {
+    const sut = makeSut()
+    const result = sut.rest(7420122351257453, 8773915326797283)
+    expect(result).toEqual(7420122351257453)
   })
 })
