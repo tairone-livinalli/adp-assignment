@@ -1,19 +1,7 @@
 const { MissingParamError } = require('../../utils/errors')
+const MultiplicationUseCase = require('./multiplication-usecase')
 
 const makeSut = () => {
-  class MultiplicationUseCase {
-    multiply (left, right) {
-      if (!left) {
-        throw new MissingParamError('left')
-      }
-      if (!right) {
-        throw new MissingParamError('right')
-      }
-
-      return left * right
-    }
-  }
-
   return new MultiplicationUseCase()
 }
 
