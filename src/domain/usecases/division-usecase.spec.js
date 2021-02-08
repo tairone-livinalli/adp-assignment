@@ -39,4 +39,10 @@ describe('Division UseCase', () => {
     const result = sut.divide(-4779009923225521, 5458112861418737)
     expect(result).toEqual(-0.8755791689480207)
   })
+
+  test('Should divide with negative right operator', () => {
+    const sut = makeSut()
+    const result = sut.divide(4779009923225521, -5458112861418737)
+    expect(result).toEqual(-0.8755791689480207)
+  })
 })
