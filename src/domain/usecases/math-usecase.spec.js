@@ -70,27 +70,27 @@ class MathUseCase {
     this.left = left
     this.right = right
 
-    this[operation]()
+    return this[operation]()
   }
 
   addition () {
-    this.additionUseCase.add(this.left, this.right)
+    return this.additionUseCase.add(this.left, this.right)
   }
 
   subtraction () {
-    this.subtractionUseCase.sub(this.left, this.right)
+    return this.subtractionUseCase.sub(this.left, this.right)
   }
 
   multiplication () {
-    this.multiplicationUseCase.multiply(this.left, this.right)
+    return this.multiplicationUseCase.multiply(this.left, this.right)
   }
 
   division () {
-    this.divisionUseCase.divide(this.left, this.right)
+    return this.divisionUseCase.divide(this.left, this.right)
   }
 
   remainder () {
-    this.remainderUseCase.rest(this.left, this.right)
+    return this.remainderUseCase.rest(this.left, this.right)
   }
 
   isOperationValid (operation) {
@@ -220,6 +220,13 @@ describe('Math UseCase', () => {
     expect(additionUseCaseSpy.right).toEqual('right')
   })
 
+  test('Should return null if AdditionUseCase returns null', () => {
+    const { sut, additionUseCaseSpy } = makeSut()
+    additionUseCaseSpy.add = () => { return null }
+    const result = sut.calculate('id', 'addition', 'left', 'right')
+    expect(result).toBeNull()
+  })
+
   test('Should throw if no AdditionUseCase is provided', () => {
     const sut = new MathUseCase()
     expect(() => sut.calculate('id', 'addition', 'left', 'right')).toThrow(new MissingParamError('additionUseCase'))
@@ -240,6 +247,13 @@ describe('Math UseCase', () => {
     const { sut, subtractionUseCaseSpy } = makeSut()
     sut.calculate('id', 'subtraction', 'left', 'right')
     expect(subtractionUseCaseSpy.right).toEqual('right')
+  })
+
+  test('Should return null if SubtractionUseCase returns null', () => {
+    const { sut, subtractionUseCaseSpy } = makeSut()
+    subtractionUseCaseSpy.sub = () => { return null }
+    const result = sut.calculate('id', 'subtraction', 'left', 'right')
+    expect(result).toBeNull()
   })
 
   test('Should throw if no SubtractionUseCase is provided', () => {
@@ -264,6 +278,13 @@ describe('Math UseCase', () => {
     expect(multiplicationUseCaseSpy.right).toEqual('right')
   })
 
+  test('Should return null if MultiplicationUseCase returns null', () => {
+    const { sut, multiplicationUseCaseSpy } = makeSut()
+    multiplicationUseCaseSpy.multiply = () => { return null }
+    const result = sut.calculate('id', 'multiplication', 'left', 'right')
+    expect(result).toBeNull()
+  })
+
   test('Should throw if no MultiplicationUseCase is provided', () => {
     const sut = new MathUseCase({ add: {} }, { sub: {} })
     expect(() => sut.calculate('id', 'multiplication', 'left', 'right')).toThrow(new MissingParamError('multiplicationUseCase'))
@@ -286,6 +307,13 @@ describe('Math UseCase', () => {
     expect(divisionUseCaseSpy.right).toEqual('right')
   })
 
+  test('Should return null if DivisionUseCase returns null', () => {
+    const { sut, divisionUseCaseSpy } = makeSut()
+    divisionUseCaseSpy.divide = () => { return null }
+    const result = sut.calculate('id', 'division', 'left', 'right')
+    expect(result).toBeNull()
+  })
+
   test('Should throw if no DivisionUseCase is provided', () => {
     const sut = new MathUseCase({ add: {} }, { sub: {} }, { multiply: {} })
     expect(() => sut.calculate('id', 'division', 'left', 'right')).toThrow(new MissingParamError('divisionUseCase'))
@@ -306,6 +334,13 @@ describe('Math UseCase', () => {
     const { sut, remainderUseCaseSpy } = makeSut()
     sut.calculate('id', 'remainder', 'left', 'right')
     expect(remainderUseCaseSpy.right).toEqual('right')
+  })
+
+  test('Should return null if RemainderUseCase returns null', () => {
+    const { sut, remainderUseCaseSpy } = makeSut()
+    remainderUseCaseSpy.rest = () => { return null }
+    const result = sut.calculate('id', 'remainder', 'left', 'right')
+    expect(result).toBeNull()
   })
 
   test('Should throw if no RemainderUseCase is provided', () => {
