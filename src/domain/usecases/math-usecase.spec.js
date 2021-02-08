@@ -32,6 +32,14 @@ class MathUseCase {
       throw new InvalidParamError('additionUseCase')
     }
 
+    if (!this.subtractionUseCase) {
+      throw new MissingParamError('subtractionUseCase')
+    }
+
+    if (!this.subtractionUseCase.sub) {
+      throw new InvalidParamError('subtractionUseCase')
+    }
+
     this.left = left
     this.right = right
 
@@ -169,5 +177,15 @@ describe('Math UseCase', () => {
     const { sut, subtractionUseCaseSpy } = makeSut()
     sut.calculate('id', 'subtraction', 'left', 'right')
     expect(subtractionUseCaseSpy.right).toEqual('right')
+  })
+
+  test('Should throw if no SubtractionUseCase is provided', () => {
+    const sut = new MathUseCase({ add: {} })
+    expect(() => sut.calculate('id', 'subtraction', 'left', 'right')).toThrow(new MissingParamError('subtractionUseCase'))
+  })
+
+  test('Should throw if no SubtractionUseCase has no sub method', () => {
+    const sut = new MathUseCase({ add: {} }, {})
+    expect(() => sut.calculate('id', 'subtraction', 'left', 'right')).toThrow(new InvalidParamError('subtractionUseCase'))
   })
 })
