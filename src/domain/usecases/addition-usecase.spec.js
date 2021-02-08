@@ -9,6 +9,8 @@ const makeSut = () => {
       if (!right) {
         throw new MissingParamError('right')
       }
+
+      return left + right
     }
   }
 
@@ -24,5 +26,11 @@ describe('Addition UseCase', () => {
   test('Should throw if no right operator is provided', () => {
     const sut = makeSut()
     expect(() => sut.add('left')).toThrow(new MissingParamError('right'))
+  })
+
+  test('Should successfully add if called with positive numbers', () => {
+    const sut = makeSut()
+    const result = sut.add(2, 3)
+    expect(result).toEqual(5)
   })
 })
