@@ -1,10 +1,11 @@
 const { MissingParamError, InvalidParamError } = require('../../utils/errors')
 
 class MathUseCase {
-  constructor (additionUseCase, subtractionUseCase) {
+  constructor (additionUseCase, subtractionUseCase, multiplicationUseCase) {
     this.validOperations = ['addition', 'subtraction', 'multiplication', 'division', 'remainder']
     this.additionUseCase = additionUseCase
     this.subtractionUseCase = subtractionUseCase
+    this.multiplicationUseCase = multiplicationUseCase
   }
 
   calculate (id, operation, left, right) {
@@ -40,6 +41,14 @@ class MathUseCase {
       throw new InvalidParamError('subtractionUseCase')
     }
 
+    if (!this.multiplicationUseCase) {
+      throw new MissingParamError('multiplicationUseCase')
+    }
+
+    if (!this.multiplicationUseCase.multiply) {
+      throw new InvalidParamError('multiplicationUseCase')
+    }
+
     this.left = left
     this.right = right
 
@@ -52,6 +61,10 @@ class MathUseCase {
 
   subtraction () {
     this.subtractionUseCase.sub(this.left, this.right)
+  }
+
+  multiplication () {
+    this.multiplicationUseCase.multiply(this.left, this.right)
   }
 
   isOperationValid (operation) {
@@ -72,14 +85,22 @@ const makeSut = () => {
       this.right = right
     }
   }
+  class MultiplicationUseCaseSpy {
+    multiply (left, right) {
+      this.left = left
+      this.right = right
+    }
+  }
   const additionUseCaseSpy = new AdditionUseCaseSpy()
   const subtractionUseCaseSpy = new SubtractionUseCaseSpy()
-  const sut = new MathUseCase(additionUseCaseSpy, subtractionUseCaseSpy)
+  const multiplicationUseCaseSpy = new MultiplicationUseCaseSpy()
+  const sut = new MathUseCase(additionUseCaseSpy, subtractionUseCaseSpy, multiplicationUseCaseSpy)
 
   return {
     sut,
     additionUseCaseSpy,
-    subtractionUseCaseSpy
+    subtractionUseCaseSpy,
+    multiplicationUseCaseSpy
   }
 }
 
@@ -187,5 +208,27 @@ describe('Math UseCase', () => {
   test('Should throw if no SubtractionUseCase has no sub method', () => {
     const sut = new MathUseCase({ add: {} }, {})
     expect(() => sut.calculate('id', 'subtraction', 'left', 'right')).toThrow(new InvalidParamError('subtractionUseCase'))
+  })
+
+  test('Should call MultiplicationUseCase with correct left operator if multiplication operation is provided', () => {
+    const { sut, multiplicationUseCaseSpy } = makeSut()
+    sut.calculate('id', 'multiplication', 'left', 'right')
+    expect(multiplicationUseCaseSpy.left).toEqual('left')
+  })
+
+  test('Should call MultiplicationUseCase with correct right operator if multiplication operation is provided', () => {
+    const { sut, multiplicationUseCaseSpy } = makeSut()
+    sut.calculate('id', 'multiplication', 'left', 'right')
+    expect(multiplicationUseCaseSpy.right).toEqual('right')
+  })
+
+  test('Should throw if no MultiplicationUseCase is provided', () => {
+    const sut = new MathUseCase({ add: {} }, { sub: {} })
+    expect(() => sut.calculate('id', 'multiplication', 'left', 'right')).toThrow(new MissingParamError('multiplicationUseCase'))
+  })
+
+  test('Should throw if no MultiplicationUseCase has no sub method', () => {
+    const sut = new MathUseCase({ add: {} }, { sub: {} }, { })
+    expect(() => sut.calculate('id', 'multiplication', 'left', 'right')).toThrow(new InvalidParamError('multiplicationUseCase'))
   })
 })
