@@ -45,4 +45,10 @@ describe('Addition UseCase', () => {
     const result = sut.add(-3937124165523131, 8138589928066581)
     expect(result).toEqual(4201465762543450)
   })
+
+  test('Should add if called with negative right operator', () => {
+    const sut = makeSut()
+    const result = sut.add(-3594135326301395, -1194324637154331)
+    expect(result).toEqual(-4788459963455726)
+  })
 })
