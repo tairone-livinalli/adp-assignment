@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "lint": "standard --fix",
     "test": "jest --silent --colors --noStackTrace --passWithNoTests",
     "test:unit": "npm run test -- --watch -c jest-unit-config.js",
     "test:integration": "npm run test -- --watch -c jest-integration-config.js",
