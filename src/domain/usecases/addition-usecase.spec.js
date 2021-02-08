@@ -33,4 +33,10 @@ describe('Addition UseCase', () => {
     const result = sut.add(2, 3)
     expect(result).toEqual(5)
   })
+
+  test('Should successfully add if called with large positive numbers', () => {
+    const sut = makeSut()
+    const result = sut.add(4023771758034621, 6786420380259905)
+    expect(result).toEqual(10810192138294526)
+  })
 })
