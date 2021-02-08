@@ -6,6 +6,7 @@ const makeAdditionUseCase = () => {
     add (left, right) {
       this.left = left
       this.right = right
+      return 2
     }
   }
 
@@ -151,7 +152,7 @@ describe('Math UseCase', () => {
   test('Should return null if AdditionUseCase returns null', () => {
     const { sut, additionUseCaseSpy } = makeSut()
     additionUseCaseSpy.add = () => { return null }
-    const result = sut.calculate('id', 'addition', 'left', 'right')
+    const { result } = sut.calculate('id', 'addition', 'left', 'right')
     expect(result).toBeNull()
   })
 
@@ -180,7 +181,7 @@ describe('Math UseCase', () => {
   test('Should return null if SubtractionUseCase returns null', () => {
     const { sut, subtractionUseCaseSpy } = makeSut()
     subtractionUseCaseSpy.sub = () => { return null }
-    const result = sut.calculate('id', 'subtraction', 'left', 'right')
+    const { result } = sut.calculate('id', 'subtraction', 'left', 'right')
     expect(result).toBeNull()
   })
 
@@ -209,7 +210,7 @@ describe('Math UseCase', () => {
   test('Should return null if MultiplicationUseCase returns null', () => {
     const { sut, multiplicationUseCaseSpy } = makeSut()
     multiplicationUseCaseSpy.multiply = () => { return null }
-    const result = sut.calculate('id', 'multiplication', 'left', 'right')
+    const { result } = sut.calculate('id', 'multiplication', 'left', 'right')
     expect(result).toBeNull()
   })
 
@@ -238,7 +239,7 @@ describe('Math UseCase', () => {
   test('Should return null if DivisionUseCase returns null', () => {
     const { sut, divisionUseCaseSpy } = makeSut()
     divisionUseCaseSpy.divide = () => { return null }
-    const result = sut.calculate('id', 'division', 'left', 'right')
+    const { result } = sut.calculate('id', 'division', 'left', 'right')
     expect(result).toBeNull()
   })
 
@@ -267,7 +268,7 @@ describe('Math UseCase', () => {
   test('Should return null if RemainderUseCase returns null', () => {
     const { sut, remainderUseCaseSpy } = makeSut()
     remainderUseCaseSpy.rest = () => { return null }
-    const result = sut.calculate('id', 'remainder', 'left', 'right')
+    const { result } = sut.calculate('id', 'remainder', 'left', 'right')
     expect(result).toBeNull()
   })
 
@@ -279,5 +280,12 @@ describe('Math UseCase', () => {
   test('Should throw if no RemainderUseCase has no sub method', () => {
     const sut = new MathUseCase({ add: {} }, { sub: {} }, { multiply: {} }, { divide: {} }, {})
     expect(() => sut.calculate('id', 'remainder', 'left', 'right')).toThrow(new InvalidParamError('remainderUseCase'))
+  })
+
+  test('Should return a correct object if Addition operation is successfully called', () => {
+    const { sut } = makeSut()
+    const additionResult = sut.calculate('id', 'addition', 1, 1)
+    expect(additionResult.id).toEqual(sut.id)
+    expect(additionResult.result).toEqual(2)
   })
 })

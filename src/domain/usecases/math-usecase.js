@@ -67,10 +67,13 @@ module.exports = class MathUseCase {
       throw new InvalidParamError('remainderUseCase')
     }
 
+    this.id = id
     this.left = left
     this.right = right
 
-    return this[operation]()
+    const result = this[operation]()
+
+    return { id, result }
   }
 
   addition () {
