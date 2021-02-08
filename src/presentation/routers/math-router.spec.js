@@ -1,5 +1,6 @@
 const MathRouter = require('./math-router')
-const { MissingParamError, InvalidParamError, ServerError } = require('../errors')
+const { ServerError } = require('../errors')
+const { MissingParamError, InvalidParamError } = require('../../utils/errors')
 
 const makeSut = () => {
   class MathUseCaseSpy {
