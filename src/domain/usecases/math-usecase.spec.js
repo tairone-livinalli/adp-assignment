@@ -30,6 +30,7 @@ const makeMultiplicationUseCase = () => {
     multiply (left, right) {
       this.left = left
       this.right = right
+      return 1
     }
   }
 
@@ -292,8 +293,15 @@ describe('Math UseCase', () => {
 
   test('Should return a correct object if Subtraction operation is successfully called', () => {
     const { sut } = makeSut()
-    const subtraction = sut.calculate('id', 'subtraction', 1, 1)
-    expect(subtraction.id).toEqual(sut.id)
-    expect(subtraction.result).toEqual(0)
+    const subtractionResult = sut.calculate('id', 'subtraction', 1, 1)
+    expect(subtractionResult.id).toEqual(sut.id)
+    expect(subtractionResult.result).toEqual(0)
+  })
+
+  test('Should return a correct object if Multiplication operation is successfully called', () => {
+    const { sut } = makeSut()
+    const multiplicationResult = sut.calculate('id', 'multiplication', 1, 1)
+    expect(multiplicationResult.id).toEqual(sut.id)
+    expect(multiplicationResult.result).toEqual(1)
   })
 })
