@@ -9,6 +9,8 @@ const makeSut = () => {
       if (!right) {
         throw new MissingParamError('right')
       }
+
+      return left / right
     }
   }
 
@@ -24,5 +26,11 @@ describe('Division UseCase', () => {
   test('Should throws if no right operator is provided', () => {
     const sut = makeSut()
     expect(() => sut.divide('left')).toThrow(new MissingParamError('right'))
+  })
+
+  test('Should divide two positive numbers', () => {
+    const sut = makeSut()
+    const result = sut.divide(10, 5)
+    expect(result).toEqual(2)
   })
 })
