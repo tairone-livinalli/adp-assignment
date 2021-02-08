@@ -31,76 +31,85 @@ class MathUseCase {
   }
 }
 
+const makeSut = () => {
+  class AdditionUseCaseSpy {
+    add (left) {
+      this.left = left
+    }
+  }
+  const additionUseCaseSpy = new AdditionUseCaseSpy()
+  const sut = new MathUseCase(additionUseCaseSpy)
+
+  return {
+    sut,
+    additionUseCaseSpy
+  }
+}
+
 describe('Math UseCase', () => {
   test('Should throw if no id is provided', () => {
-    const sut = new MathUseCase()
+    const { sut } = makeSut()
     expect(sut.calculate).toThrow(new MissingParamError('id'))
   })
 
   test('Should throw if no operation is provided', () => {
-    const sut = new MathUseCase()
+    const { sut } = makeSut()
     expect(() => sut.calculate('id')).toThrow(new MissingParamError('operation'))
   })
 
   test('Should throw if no left operator is provided', () => {
-    const sut = new MathUseCase()
+    const { sut } = makeSut()
     expect(() => sut.calculate('id', 'operation')).toThrow(new MissingParamError('left'))
   })
 
   test('Should throw if no right operator is provided', () => {
-    const sut = new MathUseCase()
+    const { sut } = makeSut()
     expect(() => sut.calculate('id', 'operation', 'left')).toThrow(new MissingParamError('right'))
   })
 
   test('Should throw if an invalid operation is provided', () => {
-    const sut = new MathUseCase()
+    const { sut } = makeSut()
     expect(() => sut.calculate('id', 'operation', 'left', 'right')).toThrow(new InvalidParamError('operation'))
   })
 
   test('Should return false if an invalid operation is provided to validate operation method', () => {
-    const sut = new MathUseCase()
+    const { sut } = makeSut()
     const isOperationValid = sut.isOperationValid('operation')
     expect(isOperationValid).toBe(false)
   })
 
   test('Should return true if addition operation is provided to validate operation method', () => {
-    const sut = new MathUseCase()
+    const { sut } = makeSut()
     const isOperationValid = sut.isOperationValid('addition')
     expect(isOperationValid).toBe(true)
   })
 
   test('Should return true if subtraction operation is provided to validate operation method', () => {
-    const sut = new MathUseCase()
+    const { sut } = makeSut()
     const isOperationValid = sut.isOperationValid('subtraction')
     expect(isOperationValid).toBe(true)
   })
 
   test('Should return true if multiplication operation is provided to validate operation method', () => {
-    const sut = new MathUseCase()
+    const { sut } = makeSut()
     const isOperationValid = sut.isOperationValid('multiplication')
     expect(isOperationValid).toBe(true)
   })
 
   test('Should return true if division operation is provided to validate operation method', () => {
-    const sut = new MathUseCase()
+    const { sut } = makeSut()
     const isOperationValid = sut.isOperationValid('division')
     expect(isOperationValid).toBe(true)
   })
 
   test('Should return true if remainder operation is provided to validate operation method', () => {
-    const sut = new MathUseCase()
+    const { sut } = makeSut()
     const isOperationValid = sut.isOperationValid('remainder')
     expect(isOperationValid).toBe(true)
   })
 
   test('Should call AdditionUseCase with correct left operator if addition operation is provided', () => {
-    class AdditionUseCaseSpy {
-      add (left) {
-        this.left = left
-      }
-    }
-    const additionUseCaseSpy = new AdditionUseCaseSpy()
-    const sut = new MathUseCase(additionUseCaseSpy)
+    const { sut, additionUseCaseSpy } = makeSut()
     sut.calculate('id', 'addition', 'left', 'right')
     expect(additionUseCaseSpy.left).toEqual('left')
   })
