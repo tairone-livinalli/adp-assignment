@@ -83,4 +83,10 @@ describe('Math UseCase', () => {
     const isOperationValid = sut.isOperationValid('division')
     expect(isOperationValid).toBe(true)
   })
+
+  test('Should return true if remainder operation is provided to validate operation method', () => {
+    const sut = new MathUseCase()
+    const isOperationValid = sut.isOperationValid('remainder')
+    expect(isOperationValid).toBe(true)
+  })
 })
