@@ -43,7 +43,7 @@ class MathUseCase {
   }
 
   subtraction () {
-    this.subtractionUseCase.sub(this.left)
+    this.subtractionUseCase.sub(this.left, this.right)
   }
 
   isOperationValid (operation) {
@@ -59,8 +59,9 @@ const makeSut = () => {
     }
   }
   class SubtractionUseCaseSpy {
-    sub (left) {
+    sub (left, right) {
       this.left = left
+      this.right = right
     }
   }
   const additionUseCaseSpy = new AdditionUseCaseSpy()
@@ -162,5 +163,11 @@ describe('Math UseCase', () => {
     const { sut, subtractionUseCaseSpy } = makeSut()
     sut.calculate('id', 'subtraction', 'left', 'right')
     expect(subtractionUseCaseSpy.left).toEqual('left')
+  })
+
+  test('Should call SubtractionUseCase with correct right operator if subtraction operation is provided', () => {
+    const { sut, subtractionUseCaseSpy } = makeSut()
+    sut.calculate('id', 'subtraction', 'left', 'right')
+    expect(subtractionUseCaseSpy.right).toEqual('right')
   })
 })
