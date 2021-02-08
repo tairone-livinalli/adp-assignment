@@ -1,6 +1,6 @@
-const mathRouter = require('../composers/tasks-router-composer')
-const expressRouterAdapter = require('../adapters/express-router-adapter')
+const MathRouterComposer = require('../composers/tasks-router-composer')
+const { adapt } = require('../adapters/express-router-adapter')
 
 module.exports = router => {
-  router.post('/tasks', expressRouterAdapter.adapt(mathRouter))
+  router.post('/tasks', adapt(MathRouterComposer.compose()))
 }

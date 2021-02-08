@@ -6,12 +6,16 @@ const MultiplicationUseCase = require('../../domain/usecases/multiplication-usec
 const DivisionUseCase = require('../../domain/usecases/division-usecase')
 const RemainderUseCase = require('../../domain/usecases/remainder-usecase')
 
-const additionUseCase = new AdditionUseCase()
-const subtractionUseCase = new SubtractionUseCase()
-const multiplicationUseCase = new MultiplicationUseCase()
-const divisionUseCase = new DivisionUseCase()
-const remainderUseCase = new RemainderUseCase()
-const mathUseCase = new MathUseCase({ additionUseCase, subtractionUseCase, multiplicationUseCase, divisionUseCase, remainderUseCase })
-const mathRouter = new MathRouter(mathUseCase)
+module.exports = class MathRouterComposer {
+  static compose () {
+    const additionUseCase = new AdditionUseCase()
+    const subtractionUseCase = new SubtractionUseCase()
+    const multiplicationUseCase = new MultiplicationUseCase()
+    const divisionUseCase = new DivisionUseCase()
+    const remainderUseCase = new RemainderUseCase()
+    const mathUseCase = new MathUseCase({ additionUseCase, subtractionUseCase, multiplicationUseCase, divisionUseCase, remainderUseCase })
+    const mathRouter = new MathRouter(mathUseCase)
 
-module.exports = mathRouter
+    return mathRouter
+  }
+}
