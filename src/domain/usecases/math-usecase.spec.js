@@ -65,4 +65,10 @@ describe('Math UseCase', () => {
     const isOperationValid = sut.isOperationValid('addition')
     expect(isOperationValid).toBe(true)
   })
+
+  test('Should return true if subtraction operation is provided to validate operation method', () => {
+    const sut = new MathUseCase()
+    const isOperationValid = sut.isOperationValid('subtraction')
+    expect(isOperationValid).toBe(true)
+  })
 })
