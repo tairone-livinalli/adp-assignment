@@ -166,6 +166,11 @@ describe('Math UseCase', () => {
     expect(result).toBeNull()
   })
 
+  test('Should throw if no dependency is provided', () => {
+    const sut = new MathUseCase()
+    expect(sut.calculate).toThrow()
+  })
+
   test('Should throw if no AdditionUseCase is provided', () => {
     const sut = new MathUseCase({})
     expect(() => sut.calculate('id', 'addition', 'left', 'right')).toThrow(new MissingParamError('additionUseCase'))
