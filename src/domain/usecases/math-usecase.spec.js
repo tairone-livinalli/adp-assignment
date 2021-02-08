@@ -1,42 +1,67 @@
 const { MissingParamError, InvalidParamError } = require('../../utils/errors')
 const MathUseCase = require('./math-usecase')
 
-const makeSut = () => {
+const makeAdditionUseCase = () => {
   class AdditionUseCaseSpy {
     add (left, right) {
       this.left = left
       this.right = right
     }
   }
+
+  return new AdditionUseCaseSpy()
+}
+
+const makeSubtractionUseCase = () => {
   class SubtractionUseCaseSpy {
     sub (left, right) {
       this.left = left
       this.right = right
     }
   }
+
+  return new SubtractionUseCaseSpy()
+}
+
+const makeMultiplicationUseCase = () => {
   class MultiplicationUseCaseSpy {
     multiply (left, right) {
       this.left = left
       this.right = right
     }
   }
+
+  return new MultiplicationUseCaseSpy()
+}
+
+const makeDivisionUseCase = () => {
   class DivisionUseCaseSpy {
     divide (left, right) {
       this.left = left
       this.right = right
     }
   }
+
+  return new DivisionUseCaseSpy()
+}
+
+const makeRemainderUseCase = () => {
   class RemainderUseCaseSpy {
     rest (left, right) {
       this.left = left
       this.right = right
     }
   }
-  const additionUseCaseSpy = new AdditionUseCaseSpy()
-  const subtractionUseCaseSpy = new SubtractionUseCaseSpy()
-  const multiplicationUseCaseSpy = new MultiplicationUseCaseSpy()
-  const divisionUseCaseSpy = new DivisionUseCaseSpy()
-  const remainderUseCaseSpy = new RemainderUseCaseSpy()
+
+  return new RemainderUseCaseSpy()
+}
+
+const makeSut = () => {
+  const additionUseCaseSpy = makeAdditionUseCase()
+  const subtractionUseCaseSpy = makeSubtractionUseCase()
+  const multiplicationUseCaseSpy = makeMultiplicationUseCase()
+  const divisionUseCaseSpy = makeDivisionUseCase()
+  const remainderUseCaseSpy = makeRemainderUseCase()
   const sut = new MathUseCase(additionUseCaseSpy, subtractionUseCaseSpy, multiplicationUseCaseSpy, divisionUseCaseSpy, remainderUseCaseSpy)
 
   return {
