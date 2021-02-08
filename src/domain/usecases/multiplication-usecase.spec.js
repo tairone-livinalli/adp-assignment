@@ -34,15 +34,21 @@ describe('Multiplication UseCase', () => {
     expect(result).toEqual(15)
   })
 
-  test('Should multiply with two negative numbers', () => {
-    const sut = makeSut()
-    const result = sut.multiply(-6626446149598523, -6379103401951707)
-    expect(result).toEqual(4.2270785175753725e+31)
-  })
-
   test('Should multiply with left operator negative number', () => {
     const sut = makeSut()
     const result = sut.multiply(-6626446149598523, 6379103401951707)
     expect(result).toEqual(-4.2270785175753725e+31)
+  })
+
+  test('Should multiply with right operator negative number', () => {
+    const sut = makeSut()
+    const result = sut.multiply(6626446149598523, -6379103401951707)
+    expect(result).toEqual(-4.2270785175753725e+31)
+  })
+
+  test('Should multiply with two negative numbers', () => {
+    const sut = makeSut()
+    const result = sut.multiply(-6626446149598523, -6379103401951707)
+    expect(result).toEqual(4.2270785175753725e+31)
   })
 })
