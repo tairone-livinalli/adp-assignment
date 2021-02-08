@@ -1,19 +1,7 @@
 const { MissingParamError } = require('../../utils/errors')
+const AdditionUseCase = require('./addition-usecase')
 
 const makeSut = () => {
-  class AdditionUseCase {
-    add (left, right) {
-      if (!left) {
-        throw new MissingParamError('left')
-      }
-      if (!right) {
-        throw new MissingParamError('right')
-      }
-
-      return left + right
-    }
-  }
-
   return new AdditionUseCase()
 }
 
