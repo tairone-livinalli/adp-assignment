@@ -1,11 +1,12 @@
 const { MissingParamError, InvalidParamError } = require('../../utils/errors')
 
 class MathUseCase {
-  constructor (additionUseCase, subtractionUseCase, multiplicationUseCase) {
+  constructor (additionUseCase, subtractionUseCase, multiplicationUseCase, divisionUseCase) {
     this.validOperations = ['addition', 'subtraction', 'multiplication', 'division', 'remainder']
     this.additionUseCase = additionUseCase
     this.subtractionUseCase = subtractionUseCase
     this.multiplicationUseCase = multiplicationUseCase
+    this.divisionUseCase = divisionUseCase
   }
 
   calculate (id, operation, left, right) {
@@ -49,6 +50,14 @@ class MathUseCase {
       throw new InvalidParamError('multiplicationUseCase')
     }
 
+    if (!this.divisionUseCase) {
+      throw new MissingParamError('divisionUseCase')
+    }
+
+    if (!this.divisionUseCase.divide) {
+      throw new InvalidParamError('divisionUseCase')
+    }
+
     this.left = left
     this.right = right
 
@@ -65,6 +74,10 @@ class MathUseCase {
 
   multiplication () {
     this.multiplicationUseCase.multiply(this.left, this.right)
+  }
+
+  division () {
+    this.divisionUseCase.divide(this.left, this.right)
   }
 
   isOperationValid (operation) {
@@ -91,16 +104,24 @@ const makeSut = () => {
       this.right = right
     }
   }
+  class DivisionUseCaseSpy {
+    divide (left, right) {
+      this.left = left
+      this.right = right
+    }
+  }
   const additionUseCaseSpy = new AdditionUseCaseSpy()
   const subtractionUseCaseSpy = new SubtractionUseCaseSpy()
   const multiplicationUseCaseSpy = new MultiplicationUseCaseSpy()
-  const sut = new MathUseCase(additionUseCaseSpy, subtractionUseCaseSpy, multiplicationUseCaseSpy)
+  const divisionUseCaseSpy = new DivisionUseCaseSpy()
+  const sut = new MathUseCase(additionUseCaseSpy, subtractionUseCaseSpy, multiplicationUseCaseSpy, divisionUseCaseSpy)
 
   return {
     sut,
     additionUseCaseSpy,
     subtractionUseCaseSpy,
-    multiplicationUseCaseSpy
+    multiplicationUseCaseSpy,
+    divisionUseCaseSpy
   }
 }
 
@@ -230,5 +251,27 @@ describe('Math UseCase', () => {
   test('Should throw if no MultiplicationUseCase has no sub method', () => {
     const sut = new MathUseCase({ add: {} }, { sub: {} }, { })
     expect(() => sut.calculate('id', 'multiplication', 'left', 'right')).toThrow(new InvalidParamError('multiplicationUseCase'))
+  })
+
+  test('Should call DivisionUseCase with correct left operator if division operation is provided', () => {
+    const { sut, divisionUseCaseSpy } = makeSut()
+    sut.calculate('id', 'division', 'left', 'right')
+    expect(divisionUseCaseSpy.left).toEqual('left')
+  })
+
+  test('Should call DivisionUseCase with correct right operator if division operation is provided', () => {
+    const { sut, divisionUseCaseSpy } = makeSut()
+    sut.calculate('id', 'division', 'left', 'right')
+    expect(divisionUseCaseSpy.right).toEqual('right')
+  })
+
+  test('Should throw if no DivisionUseCase is provided', () => {
+    const sut = new MathUseCase({ add: {} }, { sub: {} }, { multiply: {} })
+    expect(() => sut.calculate('id', 'division', 'left', 'right')).toThrow(new MissingParamError('divisionUseCase'))
+  })
+
+  test('Should throw if no DivisionUseCase has no sub method', () => {
+    const sut = new MathUseCase({ add: {} }, { sub: {} }, { multiply: {} }, {})
+    expect(() => sut.calculate('id', 'division', 'left', 'right')).toThrow(new InvalidParamError('divisionUseCase'))
   })
 })
